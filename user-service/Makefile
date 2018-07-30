@@ -1,4 +1,4 @@
 
 
 build:
-	protoc  --go_out=$(GOPATH)/src/blog-micro/user-service proto/user.proto
+	protoc -I.  --go_out=plugins=grpc:$(GOPATH)/src/blog-micro/user-service proto/user.proto

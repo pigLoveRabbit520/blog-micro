@@ -19,7 +19,6 @@ message User {
     string password = 3;
 }
 
-
 message Response {
     User user = 1;
     repeated User users = 2;
