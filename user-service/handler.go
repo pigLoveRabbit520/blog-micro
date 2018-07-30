@@ -23,6 +23,7 @@ func (h *handler) Create(ctx context.Context, req *pb.User) (resp *pb.Response, 
 	if err := h.repo.Create(req); err != nil {
 		return nil, err
 	}
+	resp = &pb.Response{}
 	resp.User = req
 	return
 }

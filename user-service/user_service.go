@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"
+	"blog-micro/user-service/model"
 	pb "blog-micro/user-service/proto"
+	"github.com/jinzhu/gorm"
 )
 
 type Repository interface {
@@ -32,7 +33,12 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 }
 
 func (repo *UserRepository) Create(u *pb.User) error {
-	if err := repo.db.Create(u).Error; err != nil {
+	user := &model.User{
+		Username: u.Username,
+		Password: u.Password,
+		Mail:     u.Mail,
+	}
+	if err := repo.db.Create(user).Error; err != nil {
 		return err
 	}
 	return nil
