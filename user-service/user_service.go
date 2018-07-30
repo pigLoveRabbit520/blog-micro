@@ -16,12 +16,11 @@ type UserRepository struct {
 }
 
 func (repo *UserRepository) Get(id int32) (*pb.User, error) {
-	var u pb.User
-	u.Uid = id
-	if err := repo.db.First(&u).Error; err != nil {
+	user := &pb.User{}
+	if err := repo.db.Where("uid = ?", id).First(user).Error; err != nil {
 		return nil, err
 	}
-	return &u, nil
+	return user, nil
 }
 
 func (repo *UserRepository) GetAll() ([]*pb.User, error) {
@@ -37,4 +36,12 @@ func (repo *UserRepository) Create(u *pb.User) error {
 		return err
 	}
 	return nil
+}
+
+func (repo *UserRepository) GetByUsername(username string) (*pb.User, error) {
+	user := &pb.User{}
+	if err := repo.db.Where("username = ? ", username).Find(user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }

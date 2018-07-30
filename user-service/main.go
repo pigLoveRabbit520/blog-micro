@@ -20,8 +20,8 @@ func main()  {
 	log.Printf("listen on: %s\n", PORT)
 
 	server := grpc.NewServer()
-	repo := UserRepository{}
-	token := TokenService{}
+	repo := &UserRepository{}
+	token := &TokenService{repo:repo}
 
 	// 向 rRPC 服务器注册微服务
 	// 此时会把我们自己实现的微服务 service 与协议中的 ShippingServiceServer 绑定
