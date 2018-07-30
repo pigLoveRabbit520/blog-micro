@@ -5,22 +5,28 @@ import (
 	"net"
 	"google.golang.org/grpc"
 	pb "blog-micro/user-service/proto"
+	"blog-micro/user-service/config"
+	"fmt"
 )
-
-const (
-	PORT = ":50051"
-)
-
 
 func main()  {
-	listener, err := net.Listen("tcp", PORT)
+	err := config.IniConfig()
+	if err != nil {
+		panic(err.Error())
+	}
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Conf.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
+		return
 	}
-	log.Printf("listen on: %s\n", PORT)
-
+	log.Printf("listen on: %d\n", config.Conf.Port)
+	db, err := CreateConnection(config.Conf)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+		return
+	}
 	server := grpc.NewServer()
-	repo := &UserRepository{}
+	repo := &UserRepository{db:db}
 	token := &TokenService{repo:repo}
 
 	// 向 rRPC 服务器注册微服务
